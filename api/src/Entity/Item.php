@@ -24,20 +24,34 @@ class Item
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?int $quantity = null;
+    private ?int $quantity = 0;
 
     #[ORM\Column]
-    private ?int $price = null;
+    private ?int $price = 0;
 
-    #[ORM\ManyToMany(targetEntity: Item::class)]
-    #[ORM\JoinTable(name: "item_components")]
-    #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id")]
-    #[ORM\InverseJoinColumn(name: "item_item_id", referencedColumnName: "id")]
-    private Collection $items;
+    #[ORM\ManyToMany(targetEntity: Component::class)]
+    private Collection $components;
 
     public function __construct()
     {
-        $this->items = new ArrayCollection();
+        $this->components = new ArrayCollection();
+    }
+
+    public function addComponent(Component $component): self
+    {
+        if (!$this->components->contains($component)) {
+            $this->components->add($component);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Component>
+     */
+    public function getComponents(): Collection
+    {
+        return $this->components;
     }
 
     public function getDescription(): ?string
@@ -55,21 +69,6 @@ class Item
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function setItems(Collection|array $items): self
-    {
-        $this->items = is_array($items) ? new ArrayCollection($items) : $items;
-
-        return $this;
     }
 
     public function getPrice(): ?int
@@ -104,6 +103,13 @@ class Item
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function removeComponent(Component $component): self
+    {
+        $this->components->removeElement($component);
 
         return $this;
     }

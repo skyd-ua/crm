@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+CRT_NAME='crm_skyd_ua'
+CRT_PATH='../config/unit/certificate.pem'
+CFG_PATH='../config/unit/config.json'
+
+__DIR__="$(dirname "$0")"
+
+cd "${__DIR__}" || {
+  echo -e "\e[32m[ERROR]: Directory does not exists: ${__DIR__}\e[0m"
+  exit
+}
+
+main() {
+  case "$1" in
+    add_ssl)
+      nginxUnit certificates/${CRT_NAME} -X PUT --data-binary @${CRT_PATH}
+      ;;
+    get_config)
+      nginxUnit config
+      ;;
+    set_config)
+      nginxUnit config -X PUT --data-binary @${CFG_PATH}
+      ;;
+    restart)
+      nginxUnit control/applications/symfony/restart
+      ;;
+    **) ;;
+
+  esac
+}
+
+nginxUnit() {
+  curl --silent --unix-socket /var/run/control.unit.sock http://localhost/"${@}" | jq
+}
+
+main "$@"
