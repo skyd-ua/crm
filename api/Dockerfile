@@ -66,4 +66,4 @@ WORKDIR ${CRM_API_DIR}
 
 VOLUME [ "/var/lib/unit", "${CRM_API_DIR}" ]
 
-EXPOSE 80 443
+EXPOSE 80 443 8000
