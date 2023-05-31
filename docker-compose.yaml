@@ -1,15 +1,37 @@
 version: '3.9'
 
 services:
+  web:
+    build:
+      context: web
+      args:
+        crm_base_dir: ${CRM_BASE_DIR}
+    container_name: crm_web
+    hostname: web
+    env_file:
+      - .env
+    volumes:
+      - ./web:${CRM_BASE_DIR}/web
+    networks:
+      - default
+    ports:
+      - "3456:3456"
+    depends_on:
+      - api
+    profiles:
+      - dev
+
   api:
     build:
       context: api
+      args:
+        crm_base_dir: ${CRM_BASE_DIR}
     container_name: crm_api
     hostname: api
     env_file:
       - .env
     volumes:
-      - ./api:${CRM_API_DIR}
+      - ./api:${CRM_BASE_DIR}/api
     networks:
       - default
     ports:

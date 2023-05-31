@@ -1,0 +1,10 @@
+api_platform:
+  show_webby: false
+
+  enable_swagger: true
+  enable_swagger_ui: true
+  swagger:
+    api_keys:
+      JWT:
+        name: Authorization
+        type: header

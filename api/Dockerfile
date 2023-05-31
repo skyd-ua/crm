@@ -1,6 +1,7 @@
 FROM nginx/unit:1.28.0-php8.1
 
-ENV CRM_API_DIR /crm/api
+ARG crm_base_dir
+ENV CRM_API_DIR="${crm_base_dir}/api"
 
 RUN apt update -qq \
  && apt install -qq -y \
@@ -28,7 +29,8 @@ RUN install-php-extensions \
     pgsql \
     pdo_pgsql \
     http \
-    xdebug
+    xdebug \
+    zip
 #    curl \
 #    gd \
 #    igbinary \
@@ -45,7 +47,7 @@ RUN install-php-extensions \
 #    soap \
 #    sockets \
 #    xml \
-#    zip
+
 
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' \
   | bash \

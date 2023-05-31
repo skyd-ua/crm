@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 CRT_NAME='crm_skyd_ua'
-CRT_PATH='../config/unit/certificate.pem'
-CFG_PATH='../config/unit/config.json'
+CRT_PATH='/crm/api/config/unit/certificate.pem'
+CFG_PATH='/crm/api/config/unit/config.json'
 
 __DIR__="$(dirname "$0")"
 
